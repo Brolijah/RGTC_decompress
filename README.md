@@ -7,7 +7,7 @@ That said, these are designed with the intent of reversing textures of an unknow
 
 ### How To Use the RGTC Module
 The function you care about is `RGTC:decompressRGTC2_to_RGBA()` which accepts the following four arguments:  
-* Input file path  
+* Raw texture buffer  
 * Width  
 * Height  
 * Channel Swizzling/Values  
