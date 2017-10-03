@@ -45,3 +45,6 @@ For some further reading material on this form of compression, I found these pag
 https://www.khronos.org/registry/DataFormat/specs/1.1/dataformat.1.1.html#RGTC  
 http://neatcorporation.com/forums/viewtopic.php?t=277  
 
+In regards to the other function contanied in `decompress_raw_rgtc.lua`, BlendMipmaps was intended for restoring the aforementioned Project DIVA textures to their original color. That function takes the grayscale and the half size normal map and Linear Light blends them together. Which turned out to work as I wanted...  
+
+![success](https://i.imgur.com/LbAkoGI.png)
