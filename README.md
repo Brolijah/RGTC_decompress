@@ -18,6 +18,7 @@ The channel swizzling was my biggest motivation for writing the script. I ran ou
 An example usage case as seen in the main lua file:  
 ```lua
 local Path = require('path')
+local FileSystem = require('fs')
 local Buffer = require("./modules/BufferExtended.lua") -- This is also needed by RGTC and Bitmap for some extra functions
 local RGTC = require("./modules/RGTC.lua")
 local Bitmap = require("./modules/Bitmap.lua")
