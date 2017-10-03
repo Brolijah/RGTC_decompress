@@ -5,7 +5,7 @@ You'll find looking at this the code is very... crass. I'll clean it up when I s
 
 That said, these are designed with the intent of reversing textures of an unknown configuration about them, including how they may have been swizzled, resolutions, what the mipmaps are used for, etc. The function call expects the raw uncontained buffer of the texture data. I figured I'd stupid proof it later when I needed to, so it lacks some error handling. (Some, not entirely.)  
 
-###How To Use the RGTC Module
+### How To Use the RGTC Module
 The function you care about is `RGTC:decompressRGTC2_to_RGBA()` which accepts the following four arguments:  
 * Input file path  
 * Width  
