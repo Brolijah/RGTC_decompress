@@ -12,7 +12,7 @@ The function you care about is `RGTC:decompressRGTC2_to_RGBA()` which accepts th
 * Height  
 * Channel Swizzling/Values  
 
-As it is right now, the input should be the raw texture data. (I'll update this in a few to accept buffers instead.)  
+As it is right now, the input should be the raw texture data as a Luvit Buffer.  
 The channel swizzle I wanted to be very self-explanatory. In order of RGBA, into where did you want the X Y and potentially Z channels placed in? This means of block compression really only stores an X channel and a Y channel. And the Z channel is regenerated when the graphical engine renders the texture. You may also put a byte value in if you want that channel to explicitly be that across all pixels.  
 The channel swizzling was my biggest motivation for writing the script. I ran out of patience trying to figure out how I should parse the textures by placing them inside DDS files and then having to re-arrange the channels. Something I don't see tools let you do is control how the texture was swizzled when you want to read it. And since I was trying to reverse files, I didn't have the luxury of knowing how it was all done beforehand.  
 An example usage case as seen in the main lua file:  
@@ -28,8 +28,14 @@ GrayScaleOutput = CURRENT_DIR .. '\\grayscale.bmp'
 NormalMapInput  = CURRENT_DIR .. '\\mip2.bin'
 NormalMapOutput = CURRENT_DIR .. '\\normal.bmp'
 
-local grayscale = RGTC:decompressRGTC2_to_RGBA(GrayScaleInput, 512, 256, {'Y','Y','Y','X'})
-local normalmap = RGTC:decompressRGTC2_to_RGBA(NormalMapInput, 256, 128, {'X','Z','Y',0xFF})
+assert(FileSystem.existsSync(GrayScaleInput, "Input grayscale texture doesn't exist!!"))
+assert(FileSystem.existsSync(NormalMapInput, "Input normal map texture doesn't exist!!"))
+
+local grayscale = Buffer:new(FileSystem.readFileSync(GrayScaleInput))
+local normalmap = Buffer:new(FileSystem.readFileSync(NormalMapInput))
+
+grayscale = RGTC:decompressRGTC2_to_RGBA(grayscale, 512, 256, {'Y','Y','Y','X'})
+normalmap = RGTC:decompressRGTC2_to_RGBA(normalmap, 256, 128, {'X','Z','Y',0xFF})
 Bitmap:save(GrayScaleOutput, grayscale, 512, 256)
 Bitmap:save(NormalMapOutput, normalmap, 256, 128)
 ```  
