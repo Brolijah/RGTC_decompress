@@ -88,9 +88,10 @@ function RGTC:decompressRGTC2_to_RGBA(buff_in, w, h, tbl_swiz)
 
     
 --  print("\nBeginning writing the RGBA buffer...")
-    local function CalcZ(x,y) 
+    local function CalcZ(x,y)
+        local MAX = 2.765
         x = (x/255.0); y = (y/255.0)
-        return math.floor(math.sqrt(math.abs(1 - (x*x+y*y))) * 192)
+        return math.floor(math.sqrt(math.abs(MAX - (x*x+y*y))) * 255)
     end
     local R,G,B,A = tbl_swiz[1], tbl_swiz[2], tbl_swiz[3], tbl_swiz[4]
     local channels = {R,G,B,A}
