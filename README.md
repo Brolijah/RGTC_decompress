@@ -34,7 +34,7 @@ local texture = Buffer:new(FileSystem.readFileSync(RawTextureInput))
 
 texture = RGTC:decompressRGTC2_to_RGBA(texture, f_width, f_height, {'Y','Y','Y','X'})
 --texture = RGTC:decompressRGTC2_to_RGBA(texture, f_width, f_height, {'X','Y','Z',0xFF}) -- another example
-Bitmap:save(GrayScaleOutput, grayscale, f_width, f_height)
+Bitmap:save(RawTextureOutput, texture, f_width, f_height)
 ```  
 
 If you're just a random person who came across this while looking into BC5/RGTC/ATI2/3Dc, and you're looking into some understanding on how to restore them to their proper colors, then perhaps I hope this may offer some guidance if you're lost.  
