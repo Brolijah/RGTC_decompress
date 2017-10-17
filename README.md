@@ -44,4 +44,4 @@ http://neatcorporation.com/forums/viewtopic.php?t=277
 
 In regards to the other function contanied in `decompress_raw_rgtc.lua`, BlendMipmaps was intended for restoring the aforementioned Project DIVA textures to their original color. The color space was in YCbCr. Mipmap 1 contains a Luminance and Alpha channel. Mipmap 2 is half the resolution and contains the Cb and Cr channels.  
 
-![perfect](https://i.imgur.com/I2LkcUT.png)
+![perfect](https://i.imgur.com/96sLcUn.png)
