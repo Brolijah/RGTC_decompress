@@ -1,7 +1,7 @@
 # RGTC_decompress
 Decoding of raw RGTC2 textures out to RGBA bitmaps.  
 **Requires Luvit.**  
-You'll find looking at this the code is very... crass. I'll clean it up when I start adding other texture formats and expand what I got here. I started making this just so I could decode some packed textures in Project DIVA F 2nd. The game files are stripped of headers and are placed in containers. And some of the textures used RGTC2/BC5/3Dc/ATI2 compression with some other special footnotes about them...  
+I'll clean this up more if I start adding other texture formats and expand what I got here. I started making this just so I could decode some packed textures in Project DIVA F 2nd. The game files are stripped of headers and are placed in containers. And some of the textures used RGTC2/BC5/3Dc/ATI2 compression with some other special footnotes about them...  
 
 That said, these are designed with the intent of reversing textures of an unknown configuration about them, including how they may have been swizzled, resolutions, what the mipmaps are used for, etc. The function call expects the raw uncontained buffer of the texture data. I figured I'd stupid proof it later when I needed to, so it lacks some error handling. (Some, not entirely.)  
 
@@ -24,21 +24,17 @@ local RGTC = require("./modules/RGTC.lua")
 local Bitmap = require("./modules/Bitmap.lua")
 
 CURRENT_DIR = Path.resolve("")
-GrayScaleInput  = CURRENT_DIR .. '\\mip1.bin'
-GrayScaleOutput = CURRENT_DIR .. '\\grayscale.bmp'
-NormalMapInput  = CURRENT_DIR .. '\\mip2.bin'
-NormalMapOutput = CURRENT_DIR .. '\\normal.bmp'
+RawTextureInput  = CURRENT_DIR .. '\\raw_data.bin'
+RawTextureOutput = CURRENT_DIR .. '\\rgba_output.bmp'
+local f_width, f_height = 512, 256
 
-assert(FileSystem.existsSync(GrayScaleInput, "Input grayscale texture doesn't exist!!"))
-assert(FileSystem.existsSync(NormalMapInput, "Input normal map texture doesn't exist!!"))
+assert(FileSystem.existsSync(RawTextureInput, "Input texture data doesn't exist!!"))
 
-local grayscale = Buffer:new(FileSystem.readFileSync(GrayScaleInput))
-local normalmap = Buffer:new(FileSystem.readFileSync(NormalMapInput))
+local texture = Buffer:new(FileSystem.readFileSync(RawTextureInput))
 
-grayscale = RGTC:decompressRGTC2_to_RGBA(grayscale, 512, 256, {'Y','Y','Y','X'})
-normalmap = RGTC:decompressRGTC2_to_RGBA(normalmap, 256, 128, {'X','Z','Y',0xFF})
-Bitmap:save(GrayScaleOutput, grayscale, 512, 256)
-Bitmap:save(NormalMapOutput, normalmap, 256, 128)
+texture = RGTC:decompressRGTC2_to_RGBA(texture, f_width, f_height, {'Y','Y','Y','X'})
+--texture = RGTC:decompressRGTC2_to_RGBA(texture, f_width, f_height, {'X','Y','Z',0xFF}) -- another example
+Bitmap:save(GrayScaleOutput, grayscale, f_width, f_height)
 ```  
 
 If you're just a random person who came across this while looking into BC5/RGTC/ATI2/3Dc, and you're looking into some understanding on how to restore them to their proper colors, then perhaps I hope this may offer some guidance if you're lost.  
@@ -46,6 +42,6 @@ For some further reading material on this form of compression, I found these pag
 https://www.khronos.org/registry/DataFormat/specs/1.1/dataformat.1.1.html#RGTC  
 http://neatcorporation.com/forums/viewtopic.php?t=277  
 
-In regards to the other function contanied in `decompress_raw_rgtc.lua`, BlendMipmaps was intended for restoring the aforementioned Project DIVA textures to their original color. That function takes the grayscale and the half size normal map and does some weird variation of Linear Light blending (to be more technical, Add Signed Normal) with a bias to it. In my tests, the red channel is usually accurate to the post-blended buffer ripped using renderdocs. Blue has some more variation to it but it's mostly accurate. And green is all over the place...  
+In regards to the other function contanied in `decompress_raw_rgtc.lua`, BlendMipmaps was intended for restoring the aforementioned Project DIVA textures to their original color. The color space was in YCbCr. Mipmap 1 contains a Luminance and Alpha channel. Mipmap 2 is half the resolution and contains the Cb and Cr channels.  
 
-![new_success](https://i.imgur.com/ChWYtP1.png)
+![perfect](https://i.imgur.com/I2LkcUT.png)
