@@ -30,9 +30,9 @@ function BlendMipmaps(grayscale, component, w, h)
             G = {1.000, -0.344, -0.714},
             B = {1.000,  1.772,  0.000}},
         HD = { -- High Definition
-            R = {1.000,  0.000,  1.575},
-            G = {1.000, -0.187, -0.468},
-            B = {1.000,  1.856,  0.000}}
+            R = {1.0000,  0.0000,  1.5748},
+            G = {1.0000, -0.1873, -0.4681},
+            B = {1.0000,  1.8556,  0.0000}}
     }
 
     local function Convert_8bitYCbCr_to_8bitRGB(ypb, cbb, crb)
